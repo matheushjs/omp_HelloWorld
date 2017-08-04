@@ -1,14 +1,22 @@
 #include <iostream>
-#include <omp.h>
 #include <cstdlib>
+
+#ifdef _OPENMP
+#  include <omp.h>
+#endif
 
 using namespace std;
 
 void sumVec(int *one, int *two, int *out, int vecSize){
 	int init, step;
 
+#ifdef _OPENMP
 	step = omp_get_num_threads();
 	init = omp_get_thread_num();
+#else
+	step = 1;
+	init = 0;
+#endif
 	while(init < vecSize){
 		out[init] = one[init] + two[init];
 		init += step;
